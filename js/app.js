@@ -1,19 +1,24 @@
 function calcularOp(numop1, numop2, opnum) {
     var resultop = 0;
-    if (numop2 != 0 && numop1 != 0) {
+    if (numop2 != 0 || numop1 != 0) {
         switch (opnum) {
             case 1:
-                return resultop = parseFloat(numop1 * numop2);
+                resultop = parseFloat(numop1 * numop2);
+                break;
             case 2:
-                return resultop = parseFloat(numop1 + numop2);
+                resultop = parseFloat(numop1 + numop2);
+                break;
             case 3:
-                return resultop = parseFloat(numop1 - numop2);
+                resultop = parseFloat(numop1 - numop2);
+                break;
             case 4:
-                return resultop = parseFloat(numop1 / numop2);
+                resultop = parseFloat(numop1 / numop2);
+                break;
+            case 5:
+                resultop = parseFloat(Math.sqrt(numop1));
         }
-    } else {
-        return resultop = 0;
     }
+    return resultop;
 }
 
 function efectoTecla(tecla) {
@@ -70,12 +75,41 @@ var Calculadora = {
                     verPant = '-';
                 }
                 break;
+            case 'por':
+                console.log('Multiplicando***'); // ---> Borrar
+                operacion = 1;
+                verPant = '';
+                break;
+            case 'mas':
+                console.log('Sumando+++'); // ---> Borrar
+                operacion = 2;
+                verPant = '';
+                break;
+            case 'menos':
+                console.log('Restando---'); // ---> Borrar
+                operacion = 3;
+                verPant = '';
+                break;
+            case 'dividido':
+                console.log('Dividiendo///'); // ---> Borrar
+                operacion = 4;
+                verPant = '';
+                break;
+            case 'raiz':
+                console.log('Calculando Raiz///'); // ---> Borrar
+                operacion = 5;
+                verPant = '';
+                break;
+            case 'igual':
+                break;
             default:
-                console.log(clkTecla.path[0].id); // ---> Borrar
-                verPant = verPant + clkTecla.path[0].id.toString();
+                if ((clkTecla.path[0].id >= 0 && clkTecla.path[0].id <= 9) && (parseFloat(verPant) != 0 || verPant.includes('.')) && verPant.length < 8) {
+                    verPant = verPant + clkTecla.path[0].id.toString();
+                }
+                console.log('Presionaste: ' + clkTecla.path[0].id.toString() + ' ===> ' + clkTecla.path[0].id + '---> ' + parseFloat(verPant) + ' - ' + primerOp + ' - ' + segundOp + ' - ' + operacion); // ---> Borrar
                 break;
         }
-        if (document.getElementById('display').innerHTML.length < 9) {
+        if (document.getElementById('display').innerHTML.length <= 8) {
             document.getElementsByTagName('span')[1].innerHTML = verPant;
             if (verPant == 'E') {
                 verPant = '';
@@ -101,27 +135,28 @@ var Calculadora = {
         if (document.getElementById('display').innerHTML.length == 1 && document.getElementById('display').innerHTML == '0') {
             verPant = '';
         }
-        if (teclaPres == 13 || (teclaPres >= 45 && teclaPres <= 57) || (teclaPres >= 42 && teclaPres <= 43)) {
-            if (teclaPres == 13) {
-                console.log('Presionaste Enter...'); // ---> Borrar
-                primerOp = 0, segundOp = 0;
-            } else if ((teclaPres >= 48 && teclaPres <= 57) && (parseFloat(verPant) != 0 || verPant.includes('.'))) {
+        if (teclaPres == 13 || (teclaPres >= 42 && teclaPres <= 57) || (teclaPres >= 42 && teclaPres <= 43)) {
+            if (teclaPres == 13 && operacion != 0) {
+                if ((verPant.length >= 1 && parseFloat(verPant) != 0) && parseFloat(primerOp) != 0) {
+                    segundOp = parseFloat(verPant);
+                }
+                resultado = calcularOp(primerOp, segundOp, operacion);
+                primerOp = 0, segundOp = 0, operacion = 0;
+                verPant = (parseFloat(resultado.toFixed(7)).toString()).substr(0, 8);
+            } else if ((teclaPres >= 48 && teclaPres <= 57) && (parseFloat(verPant) != 0 || verPant.includes('.')) && verPant.length < 8) {
                 verPant = verPant + String.fromCharCode(teclaPres);
-            } else if (teclaPres == 46 && !verPant.includes('.')) {
+            } else if (teclaPres == 46 && !verPant.includes('.') && verPant.length < 8) {
                 if (verPant == '' || verPant == '-') {
                     verPant = '0';
                 }
                 verPant = verPant + String.fromCharCode(teclaPres);
             } else {
-                if ((verPant.length >= 1 && parseFloat(verPant) != 0) && parseFloat(primerOp) != 0) {
-                    segundOp = parseFloat(verPant);
-                } else if ((verPant.length >= 1 && parseFloat(verPant) != 0) && parseFloat(segundOp) == 0) {
+                if ((verPant.length >= 1 && parseFloat(verPant) != 0) && (operacion == 0 && primerOp.toString().length <= 8)) {
                     primerOp = parseFloat(verPant);
                 }
                 switch (teclaPres) {
                     case 42:
                         operacion = 1;
-                        //resultado =
                         console.log('Multiplicando***'); // ---> Borrar
                         verPant = ''
                         break;
@@ -146,12 +181,12 @@ var Calculadora = {
                         break;
                 }
             }
-            console.log('Presionaste: ' + String.fromCharCode(teclaPres) + ' = ' + teclaPres + '---> ' + parseFloat(verPant) + ' - ' + primerOp + ' - ' + segundOp); // ---> Borrar
-            if (document.getElementById('display').innerHTML.length < 9) {
-                document.getElementsByTagName('span')[1].innerHTML = verPant;
-                if (verPant == 'E') {
-                    verPant = '';
-                }
+        }
+        console.log('Presionaste: ' + String.fromCharCode(teclaPres) + ' = ' + teclaPres + '---> ' + parseFloat(verPant) + ' - ' + primerOp + ' - ' + segundOp + ' - ' + operacion); // ---> Borrar
+        if (document.getElementById('display').innerHTML.length <= 8) {
+            document.getElementsByTagName('span')[1].innerHTML = verPant;
+            if (verPant == 'E') {
+                verPant = '';
             }
         }
     }
