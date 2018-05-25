@@ -15,7 +15,7 @@ var Calculadora = {
         document.onkeypress = this.verificaTecla;
         this.asignaClick('img');
     },
-    // ---> Funcion que calcula las operaciones aritmeticas de la calculadora <--- //
+    // ---> Funcion Nativa que calcula las operaciones aritmeticas de la calculadora <--- //
     calcularOp: function(numop1, numop2, opnum) {
         var resultop = 0;
         if (numop2 != 0 || numop1 != 0) {
@@ -40,9 +40,11 @@ var Calculadora = {
     },
     // ---> Funcion Nativa que verifica los operandos en cada operacion aritmetica <--- //
     verficarOp: function(duvez) {
-        if ((verPant.length >= 1 && parseFloat(verPant) != 0) && (operacion == 0 && primerOp.toString().length <= 9 && !duvez)) {
+        if ((verPant.length >= 1 && parseFloat(verPant) != 0) &&
+            (operacion == 0 && primerOp.toString().length <= 9 && !duvez)) {
             primerOp = parseFloat(verPant);
-        } else if ((verPant.length >= 1 && parseFloat(verPant) != 0) && (segundOp == 0 && operacion != 0 && parseFloat(primerOp) != 0 && !duvez)) {
+        } else if ((verPant.length >= 1 && parseFloat(verPant) != 0) &&
+            (segundOp == 0 && operacion != 0 && parseFloat(primerOp) != 0 && !duvez)) {
             segundOp = parseFloat(verPant);
         } else if (primerOp != 0 && segundOp == 0 && operacion != 0 && duvez) {
             segundOp = primerOp;
@@ -50,7 +52,7 @@ var Calculadora = {
             primerOp = parseFloat(verPant);
         }
     },
-    // ---> Funciones de cambio y actualización de la Pantalla de la Calculadora <--- //
+    // ---> Funciones Nativas de cambio y actualización de la Pantalla de la Calculadora <--- //
     verficaPant: function(refpant) {
         if (document.getElementById('display').innerHTML.length == 1 && document.getElementById('display').innerHTML == '0') {
             refpant = '';
@@ -69,6 +71,7 @@ var Calculadora = {
         }
         return refpant;
     },
+
     // **** // ---> Funciones del evento Click de las Teclas de la Calculadora <--- // **** //
     // ---> Tecla Cero(On/C): Funcion que reinicia y coloca en Cero la Calculadora <--- //
     ceroReinico: function() {
@@ -103,7 +106,8 @@ var Calculadora = {
     // ---> Teclas Numericas(0) al (9): Funcion que agrega los numeros del 0 al 9 en la cifra operando <--- //
     teclaNumClick: function(clkTecla) {
         verPant = Calculadora.verficaPant(verPant);
-        if ((clkTecla.target.id >= 0 && clkTecla.target.id <= 9) && (parseFloat(verPant) != 0 || verPant.includes('.')) && verPant.length < 9) {
+        if ((clkTecla.target.id >= 0 && clkTecla.target.id <= 9) && (parseFloat(verPant) != 0 ||
+                verPant.includes('.')) && verPant.length < 9) {
             verPant = verPant + clkTecla.target.id.toString();
         }
         verPant = Calculadora.cambiarPant(verPant);
@@ -130,7 +134,8 @@ var Calculadora = {
                 operacion = 5;
                 break;
         }
-        if ((parseFloat(verPant) == 0 || verPant == '') && (clkTecla.target.id == 'dividido' || clkTecla.target.id == 'raiz')) {
+        if (((parseFloat(verPant) == 0 || verPant == '') && (clkTecla.target.id == 'dividido' || clkTecla.target.id == 'raiz')) ||
+            (clkTecla.target.id == 'raiz' && parseFloat(verPant) < 0)) {
             verPant = 'E';
         } else {
             verPant = ''
@@ -155,6 +160,7 @@ var Calculadora = {
         }
         verPant = Calculadora.cambiarPant(verPant);
     },
+
     // ---> Funciones para el efecto de tecla presionada en las Teclas de la Calculadora (Hacer click en tecla) <--- //
     efectoTecla: function(tecla) {
         tecla.target.style.padding = "2px";
@@ -198,6 +204,7 @@ var Calculadora = {
             }
         }
     },
+
     /* /--> Funcion que se ejecuta sobre las teclas del PC o computador interactuando con la aplicacion
             a la misma linea de tiempo. Se pueden realizar solo las operaciones de las teclas Numericas,
             Operacion aritmetica (excepto Raiz Cuadrada), Punto Decimal y resultado con -Enter- (<--|) <---/ */
@@ -207,7 +214,8 @@ var Calculadora = {
         if (teclaPres == 13 || (teclaPres >= 42 && teclaPres <= 57) || (teclaPres >= 42 && teclaPres <= 43)) {
             if (teclaPres == 13) {
                 Calculadora.igualClick();
-            } else if ((teclaPres >= 48 && teclaPres <= 57) && (parseFloat(verPant) != 0 || verPant.includes('.')) && verPant.length < 9) {
+            } else if ((teclaPres >= 48 && teclaPres <= 57) && (parseFloat(verPant) != 0 ||
+                    verPant.includes('.')) && verPant.length < 9) {
                 verPant = verPant + String.fromCharCode(teclaPres);
             } else if (teclaPres == 46 && !verPant.includes('.') && verPant.length < 9) {
                 if (verPant == '' || verPant == '-') {
