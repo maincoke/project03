@@ -1,3 +1,4 @@
+// ---> Funcion que calcula las operaciones aritmeticas de la calculadora <--- //
 function calcularOp(numop1, numop2, opnum) {
     var resultop = 0;
     if (numop2 != 0 || numop1 != 0) {
@@ -20,7 +21,7 @@ function calcularOp(numop1, numop2, opnum) {
     }
     return resultop;
 }
-
+// ---> Funciones de cambio y actualización de Pantalla <--- //
 function verficaPant(refpant) {
     if (document.getElementById('display').innerHTML.length == 1 && document.getElementById('display').innerHTML == '0') {
         refpant = '';
@@ -40,7 +41,7 @@ function cambiarPant(refpant) {
     }
     return refpant;
 }
-
+// ---> Funciones para el efecto de tecla presionada en calculadora (Hacer click en tecla) <--- //
 function efectoTecla(tecla) {
     tecla.style.padding = "2px";
     tecla.style.background = "#858080";
@@ -54,13 +55,14 @@ function efectoTeclaSoltar(tecla) {
     tecla.style.border = "";
     tecla.style.borderRadius = "0px";
 }
-
+// ---> Objeto-Modulo que realiza la operatividad y funcionalidad de la Calculadora <--- //
 var Calculadora = {
     verPant: '',
     primerOp: 0,
     segundOp: 0,
     resultado: 0,
     operacion: 0,
+    // ---> Funcion Nativa que inicia la operatividad de Calculadora <--- //
     iniciarCalc: function() {
         verPant = '',
             primerOp = 0,
@@ -70,6 +72,7 @@ var Calculadora = {
         document.onkeypress = this.verificaTecla;
         this.asignaClick('img');
     },
+    // ---> Funcion Nativa que verifica los operandos en cada operacion aritmetica <--- //
     verficarOp: function(duvez) {
         if ((verPant.length >= 1 && parseFloat(verPant) != 0) && (operacion == 0 && primerOp.toString().length <= 9 && !duvez)) {
             primerOp = parseFloat(verPant);
@@ -81,12 +84,15 @@ var Calculadora = {
             primerOp = parseFloat(verPant);
         }
     },
+    // **** // ---> Funciones del evento Click de las Teclas de la Calculadora <--- // **** //
+    // ---> Tecla Cero(On/C): Funcion que reinicia y coloca en Cero la Calculadora <--- //
     ceroReinico: function() {
         verPant = '0';
         primerOp = 0, segundOp = 0, operacion = 0, otvz = 0;
         document.getElementsByTagName('span')[1].innerHTML = verPant;
         verPant = cambiarPant(verPant);
     },
+    // ---> Tecla Punto(.): Funcion que coloca el punto decimal y verifica si ya existe el punto en cifra operando <--- //
     puntoDecimal: function() {
         verPant = verficaPant(verPant);
         if (!verPant.includes('.')) {
@@ -97,6 +103,7 @@ var Calculadora = {
         }
         verPant = cambiarPant(verPant);
     },
+    // ---> Tecla Signo(+/-): Funcion que asigna y retira el signo negativo en la cifra operando <--- //
     signoNumero: function() {
         verPant = verficaPant(verPant);
         if (Math.sign(parseFloat(verPant)) == -1 && parseFloat(verPant) < 0) {
@@ -108,6 +115,7 @@ var Calculadora = {
         }
         verPant = cambiarPant(verPant);
     },
+    // ---> Teclas Numericas(0) al (9): Funcion que agrega los numeros del 0 al 9 en la cifra operando <--- //
     teclaNumClick: function(clkTecla) {
         verPant = verficaPant(verPant);
         if ((clkTecla.target.id >= 0 && clkTecla.target.id <= 9) && (parseFloat(verPant) != 0 || verPant.includes('.')) && verPant.length < 9) {
@@ -115,6 +123,8 @@ var Calculadora = {
         }
         verPant = cambiarPant(verPant);
     },
+    /* / ---> Tecla Multiplicar(x) > Sumar(+) > Restar(-) > Dividir(:) > Raiz Cuadrada(\/¨):
+            Funcion que se ejecuta en cada una de las teclas de operaciones aritmeticas <--- / */
     teclaOperacion: function(clkTecla) {
         operacion = 0, segundOp = 0;
         Calculadora.verficarOp(false);
@@ -142,6 +152,8 @@ var Calculadora = {
         }
         verPant = cambiarPant(verPant);
     },
+    // ---> Tecla Igual(=): Funcion que ejecuta la operacion aritmetica y proporciona el resultado de la operacion <--- //
+    // Realiza ejecucion y verificacion de operacion Flash(Rapida) y Repeat(Repite operacion con 2do operando) //
     igualClick: function() {
         if (operacion != 0) {
             Calculadora.verficarOp(false);
@@ -158,12 +170,14 @@ var Calculadora = {
         }
         verPant = cambiarPant(verPant);
     },
+    // ---> Funciones de asignacion que llaman a las funciones de efecto de las Teclas de la Calculadora <--- //
     fxClickDown: function(clkTecla) {
         efectoTecla(clkTecla.target);
     },
     fxClickUp: function(clkTecla) {
         efectoTeclaSoltar(clkTecla.target);
     },
+    // ---> Funcion que realiza la asignacion de la funciones de cada tecla de la Calculadora <--- //
     asignaClick: function(e_tecla) {
         var tecla = document.getElementsByTagName(e_tecla);
         for (i = 0; i < tecla.length; i++) {
@@ -193,6 +207,9 @@ var Calculadora = {
             }
         }
     },
+    /* /--> Funcion que se ejecuta sobre las teclas del PC o computador interactuando con la aplicacion
+            a la misma linea de tiempo. Se pueden realizar solo las operaciones de las teclas Numericas,
+            Operacion aritmetica (excepto Raiz Cuadrada), Punto Decimal y resultado con -Enter- (<--|) <---/ */
     verificaTecla: function(e_tecla) {
         var teclaPres = e_tecla.which || e_tecla.keyCode;
         verPant = verficaPant(verPant);
@@ -236,4 +253,4 @@ var Calculadora = {
     }
 }
 
-Calculadora.iniciarCalc();
+Calculadora.iniciarCalc(); // ---> Operacion principal y ejecucion de Inicio de la Calculadora <--- //
